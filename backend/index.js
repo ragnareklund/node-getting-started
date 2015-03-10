@@ -5,6 +5,7 @@ var express = require('express'),
 var app = express(),
     port = parseInt(process.env.PORT, 10),
     cache = [];
+    requests = 0;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
@@ -15,14 +16,14 @@ app.use(function (req, res, next) {
     next();
 });
 
-var vars = {
+var env = {
     bucketName: process.env.INNO_BUCKET_ID,
     appKey: process.env.INNO_APP_KEY,
     appName: process.env.INNO_APP_ID,
     groupId: process.env.INNO_COMPANY_ID,
     apiUrl: process.env.INNO_API_HOST
 };
-inno.setVars(vars);
+inno.setVars(env);
 inno.setVar('collectApp', process.env.INNO_APP_ID);
 
 app.get('/', function (req, res) {
@@ -30,31 +31,37 @@ app.get('/', function (req, res) {
 });
 
 app.post('/', function (req, res) {
-    
+
     inno.getStreamData(req.body, function (error, data) {
         if (error) {
             return res.json({
                 error: error.message
             });
         }
-        
+
         if (!(data.event && data.event.createdAt && data.event.definitionId && data.data && data.profile && data.profile.id)) {
             return res.json({
                 error: 'Stream data is not correct'
             });
         }
-        
+
         cache.push({
             data: JSON.stringify({
                 created_at: data.event.createdAt,
                 values: data.data,
                 event: data.event.definitionId,
                 profile: data.profile.id,
-                link: inno.webProfileAppUrl(vars)
+                link: inno.webProfileAppUrl(env)
             }),
             created_at: Date.now()
         });
-        
+
+        requests++;
+
+        if (cache.length > 10) {
+            cache = cache.slice(-10);
+        }
+
         return inno.getSettings(function (error, settings) {
             if (error) {
                 return res.json({
@@ -83,7 +90,8 @@ app.get('/last-ten-values', function (req, res) {
     }
     return res.json({
         error: null,
-        data: cache
+        data: cache,
+        requests: requests;
     });
 });
 
