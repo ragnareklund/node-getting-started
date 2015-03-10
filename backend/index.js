@@ -90,8 +90,8 @@ app.get('/last-ten-values', function (req, res) {
     }
     return res.json({
         error: null,
-        data: cache,
-        requests: requests;
+        requests: requests,
+        data: cache
     });
 });
 
