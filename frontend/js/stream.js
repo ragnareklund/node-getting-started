@@ -31,6 +31,7 @@
                                 '</td></tr>';
                         }
                         $('#stream').find('tbody').html(values.join(''));
+                        $('requests').html(response.requests);
                     }
                     timeout = 5;
                 },
