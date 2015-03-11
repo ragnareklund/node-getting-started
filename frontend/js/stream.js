@@ -31,7 +31,7 @@
                                 '</td></tr>';
                         }
                         $('#stream').find('tbody').html(values.join(''));
-                        $('requests').html(response.requests);
+                        $('#requests').html('<p>'+response.requests+'</p>');
                     }
                     timeout = 5;
                 },
