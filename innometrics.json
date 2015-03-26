@@ -1,6 +1,6 @@
 {
-    "version_name": "node-getting-started",
-    "version_description": "",
+    "version_name": "LoadTesting-Slow",
+    "version_description": "Slow response test",
     "pages": [{
         "name": "App Settings",
         "type": "bundled",

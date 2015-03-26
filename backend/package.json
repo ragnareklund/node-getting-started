@@ -1,6 +1,6 @@
 {
-  "name": "LoadTesting",
-  "version": "0.0.4",
+  "name": "LoadTesting-Slow",
+  "version": "0.0.1",
   "description": "",
   "main": "index.js",
   "private": true,

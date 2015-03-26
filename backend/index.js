@@ -7,6 +7,8 @@ var app = express(),
     cache = [];
     requests = 0;
 
+var responseDelay = 5000; // ms
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: true
@@ -74,12 +76,11 @@ app.post('/', function (req, res) {
                         error: error.message
                     });
                 }
-                return res.json({
+                return setTimeout(res.json, responseDelay, {
                     error: null,
                     data: settings
                 });
             });
-
         });
     });
 });
